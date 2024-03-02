@@ -2,27 +2,36 @@
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
 import { Button } from '@/components/ui/button'
+import Spotlight from '@/components/Spotlight.vue'
+import Header from '@/components/Header.vue'
+import Hero from '@/components/Hero.vue'
 </script>
 
 <template>
-  <header>
-    <!-- <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div class="min-h-screen bg-background">
+    <Header />
+    <Hero />
+    <div class="h-[1000px]"></div>
+  </div>
+  <!-- <header>
+    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
       <div className="font-bold text-5xl">test2 text</div>
-    </div> -->
+    </div>
   </header>
 
-  <main>
-    <!-- <TheWelcome /> -->
+  <main className="bg-red-500 min-h-screen min-w-screen">
+    <TheWelcome />
+    <Spotlight />
     <Button>Click me</Button>
     
-  </main>
+  </main> -->
 </template>
 
 <style scoped>
-  header {
+  /* header {
     line-height: 1.5;
   }
 
@@ -47,5 +56,5 @@ import { Button } from '@/components/ui/button'
       place-items: flex-start;
       flex-wrap: wrap;
     }
-  }
+  } */
 </style>
