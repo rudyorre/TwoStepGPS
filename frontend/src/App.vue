@@ -1,60 +1,31 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-import { Button } from '@/components/ui/button'
-import Spotlight from '@/components/Spotlight.vue'
-import Header from '@/components/Header.vue'
-import Hero from '@/components/Hero.vue'
-</script>
-
 <template>
-  <div class="min-h-screen bg-background">
-    <Header />
-    <Hero />
-    <div class="h-[1000px]"></div>
-  </div>
-  <!-- <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-      <div className="font-bold text-5xl">test2 text</div>
-    </div>
-  </header>
-
-  <main className="bg-red-500 min-h-screen min-w-screen">
-    <TheWelcome />
-    <Spotlight />
-    <Button>Click me</Button>
-    
-  </main> -->
+  <nav>
+    <router-link to="/">Home</router-link> |
+    <router-link to="/about">About</router-link> |
+    <router-link to ="/dashboard">Dashboard</router-link>
+  </nav>
+  <router-view/>
 </template>
 
-<style scoped>
-  /* header {
-    line-height: 1.5;
-  }
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
 
-  .logo {
-    display: block;
-    margin: 0 auto 2rem;
-  }
+nav {
+  padding: 30px;
+}
 
-  @media (min-width: 1024px) {
-    header {
-      display: flex;
-      place-items: center;
-      padding-right: calc(var(--section-gap) / 2);
-    }
+nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
 
-    .logo {
-      margin: 0 2rem 0 0;
-    }
-
-    header .wrapper {
-      display: flex;
-      place-items: flex-start;
-      flex-wrap: wrap;
-    }
-  } */
+nav a.router-link-exact-active {
+  color: #42b983;
+}
 </style>
