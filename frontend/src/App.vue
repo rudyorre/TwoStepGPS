@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
+import Navbar from '@/components/Navbar.vue'
 </script>
 
 <template>
+  <Navbar />
   <div>
     <router-link to="/">
       Home

@@ -1,12 +1,13 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import '@/style.css'
-import '@/index.css'
+import '@/assets/style.css'
+import '@/assets/index.css'
 import App from '@/App.vue'
 
 import HomeView from '@/views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
 import ContactView from '@/views/ContactView.vue'
+import DashboardView from '@/views/DashboardView.vue'
 
 const app = createApp(App);
 
@@ -16,6 +17,7 @@ const router = createRouter({
         { path: '/', component: HomeView },
         { path: '/about', component: AboutView },
         { path: '/contact', component: ContactView },
+        { path: '/dashboard', component: DashboardView },
     ],
 });
 
