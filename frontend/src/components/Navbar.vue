@@ -6,6 +6,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 
 const components: { title: string; href: string; description: string }[] = [
@@ -52,12 +53,12 @@ const components: { title: string; href: string; description: string }[] = [
 
 <nav class="sticky top-0 bg-background/20 backdrop-blur-xl z-20">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-    <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+    <router-link to="/" class="flex items-center space-x-3 rtl:space-x-reverse">
         <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
         <div class="text-0">
             <span class="text-2xl font-extrabold whitespace-nowrap text-white">TwoStep</span><span class="text-2xl font-extrabold whitespace-nowrap text-blue-500">GPS</span>
         </div>
-    </a>
+    </router-link>
     <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
         <span class="sr-only">Open main menu</span>
         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
@@ -134,12 +135,9 @@ const components: { title: string; href: string; description: string }[] = [
                 </NavigationMenuContent>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                <NavigationMenuTrigger class="bg-foreground/0">
-                    Item One
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                    <NavigationMenuLink>Link</NavigationMenuLink>
-                </NavigationMenuContent>
+                    <router-link to="/dashboard" :class="navigationMenuTriggerStyle()">
+                        Dashboard
+                    </router-link>
                 </NavigationMenuItem>
             </NavigationMenuList>
         </NavigationMenu>
