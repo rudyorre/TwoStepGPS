@@ -1,6 +1,22 @@
 import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import './style.css'
+import { createRouter, createWebHistory } from 'vue-router'
+import '@/style.css'
+import App from '@/App.vue'
 
-createApp(App).use(router).mount('#app')
+import HomeView from '@/views/HomeView.vue'
+import AboutView from '@/views/AboutView.vue'
+import ContactView from '@/views/ContactView.vue'
+
+const app = createApp(App);
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes: [
+        { path: '/', component: HomeView },
+        { path: '/about', component: AboutView },
+        { path: '/contact', component: ContactView },
+    ],
+});
+
+app.use(router);
+app.mount('#app')
