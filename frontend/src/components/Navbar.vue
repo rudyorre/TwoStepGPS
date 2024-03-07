@@ -46,13 +46,18 @@ const components: { title: string; href: string; description: string }[] = [
       'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
   },
 ]
+import { ref, computed } from 'vue'
+const variant = ref('default');
+const navbarClasses = computed(() => {
+    return variant.value === 'default' ? 'backdrop-blur-xl' : '';
+});
 </script>
 
 <template>
 
 
-<nav class="sticky top-0 bg-background/20 backdrop-blur-xl z-20">
-  <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+<nav :class="['sticky top-0 bg-background/20 z-20', navbarClasses]">
+  <div class="flex flex-wrap items-center justify-between p-4">
     <router-link to="/" class="flex items-center space-x-3 rtl:space-x-reverse">
         <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
         <div class="text-0">

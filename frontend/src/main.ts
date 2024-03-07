@@ -8,6 +8,8 @@ import HomeView from '@/views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
 import ContactView from '@/views/ContactView.vue'
 import DashboardView from '@/views/DashboardView.vue'
+import MapView from '@/views/MapView.vue'
+import StatisticsView from '@/views/StatisticsView.vue'
 
 const app = createApp(App);
 
@@ -17,7 +19,14 @@ const router = createRouter({
         { path: '/', component: HomeView },
         { path: '/about', component: AboutView },
         { path: '/contact', component: ContactView },
-        { path: '/dashboard', component: DashboardView },
+        { 
+            path: '/dashboard',
+            component: DashboardView,
+            children: [
+                { path: '', component: MapView, name: 'Map' },
+                { path: 'statistics', component: StatisticsView, name: 'Statistics' },
+            ]
+        },
     ],
 });
 

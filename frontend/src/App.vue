@@ -5,11 +5,11 @@ import Footer from '@/components/Footer.vue'
 
 <template>
   <body class="flex flex-col min-h-screen">
-    <Navbar />
+    <Navbar id="navbar" v-if="!($route.path.includes('/dashboard'))" />
     <main class="flex-grow">
       <router-view />
     </main>
-    <Footer />
+    <Footer v-if="!($route.path.includes('/dashboard'))" />
   </body>
 </template>
 
