@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, nextTick } from 'vue'
+import { onMounted, nextTick } from 'vue'
 import { Loader } from '@googlemaps/js-api-loader'
 
 const loader = new Loader({
