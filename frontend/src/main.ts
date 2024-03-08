@@ -27,6 +27,8 @@ const router = createRouter({
                 { path: 'statistics', component: StatisticsView, name: 'Statistics' },
             ]
         },
+        // default redirect to home page
+        { path: '/:pathMatch(.*)*', redirect: '/' }
     ],
 });
 
