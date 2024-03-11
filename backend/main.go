@@ -3,7 +3,11 @@ package main
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
 )
 
 type Device struct {
@@ -19,10 +23,15 @@ type Response struct {
 	Message string `json:"message"`
 }
 
+var ONESTEPGPS_API_KEY string
+
 // getDisplayNames retrieves the display names of devices from a remote API and returns them as a
 // JSON response.
 func getDisplayNames(w http.ResponseWriter, r *http.Request) {
-	resp, err := http.Get("https://track.onestepgps.com/v3/api/public/device?latest_point=true&api-key=oUFJLAi7YeGOgFyAr8d4_TkX_2GpFJnJi64xUem_d2k")
+	resp, err := http.Get(
+		"https://track.onestepgps.com/v3/api/public/device?latest_point=true&api-key=" +
+			os.Getenv("ONESTEPGPS_API_KEY"),
+	)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -49,6 +58,10 @@ func getDisplayNames(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	err := godotenv.Load(".env.local")
+	if err != nil {
+		log.Fatalf("Error loading .env.local file: %v", err)
+	}
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		response := Response{Message: "Hello, World!"}
 		json.NewEncoder(w).Encode(response)
