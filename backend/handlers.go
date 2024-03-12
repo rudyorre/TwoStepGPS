@@ -46,6 +46,8 @@ func (d *DeviceService) getDeviceLocations(w http.ResponseWriter, r *http.Reques
 			DisplayName: device.DisplayName,
 			Latitude:    device.LatestDevicePoint.Latitude,
 			Longitude:   device.LatestDevicePoint.Longitude,
+			Altitude:    device.LatestDevicePoint.Altitude,
+			Angle:       device.LatestDevicePoint.Angle,
 		})
 	}
 

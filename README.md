@@ -6,13 +6,12 @@ Create an application consisting of a Go server and a Vue user interface which i
 ## Preliminary Stuff
 - [ ] Research the OneStepGPS API and determine what data is available and how to access it.
 - [ ] Implement authentication (basic)
+- [ ] Make two Google Maps API keys (one for development and one for production)
+- [ ] 404 Missing pages should have links to all of the actual pages (home, dashboard, about, etc)
 
 ## The Go backend should do the following:
-
 - [ ] Request information from https://track.onestepgps.com/v3/api/public/device?latest_point=true&api-key=[APIKEY]
-
 - [ ] Provide some storage mechanism for user preferences or any other relevant data (exact storage mechanism is up to you)
-
 - [ ] Provide endpoints for anything else you need in the UI
 
 ## The Vue UI should do the following:
@@ -23,3 +22,4 @@ Create an application consisting of a Go server and a Vue user interface which i
 ## Useful Links
 - [Creating a Vue.js 3 App with Vite.js and Vue Router](https://ochner.com.br/posts/creating-a-vuejs3-app-with-vitejs-and-vue-router)
 - [Flowbite - Tailwind CSS component library](https://flowbite.com/docs/getting-started/introduction/)
+- [Google Maps Javascript API Docs](https://developers.google.com/maps/documentation/javascript)

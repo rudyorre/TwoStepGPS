@@ -8,8 +8,8 @@ import HomeView from '@/views/HomeView.vue'
 import AboutView from '@/views/AboutView.vue'
 import ContactView from '@/views/ContactView.vue'
 import DashboardView from '@/views/DashboardView.vue'
-import MapView from '@/views/MapView.vue'
 import StatisticsView from '@/views/StatisticsView.vue'
+import GoogleMapLoader from '@/components/GoogleMapLoader.vue'
 
 const app = createApp(App);
 
@@ -23,7 +23,7 @@ const router = createRouter({
             path: '/dashboard',
             component: DashboardView,
             children: [
-                { path: '', component: MapView, name: 'Map' },
+                { path: '', component: GoogleMapLoader, name: 'Map' },
                 { path: 'statistics', component: StatisticsView, name: 'Statistics' },
             ]
         },

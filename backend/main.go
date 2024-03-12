@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -13,11 +14,14 @@ func main() {
 
 	deviceService := &DeviceService{APIKey: os.Getenv("ONESTEPGPS_API_KEY")}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		response := Response{Message: "Hello, World!"}
 		json.NewEncoder(w).Encode(response)
 	})
-	http.HandleFunc("/display-names", deviceService.getDisplayNames)
-	http.HandleFunc("/device-locations", deviceService.getDeviceLocations)
-	http.ListenAndServe(":8080", nil)
+	mux.HandleFunc("/display-names", deviceService.getDisplayNames)
+	mux.HandleFunc("/device-locations", deviceService.getDeviceLocations)
+
+	handler := cors.Default().Handler(mux)
+	http.ListenAndServe(":8080", handler)
 }

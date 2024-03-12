@@ -1,29 +1,20 @@
 <script setup lang="ts">
-// import type { Playlist } from '../data/playlists'
+import { defineProps, defineEmits } from 'vue'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import Logo from '@/components/Logo.vue'
+import { Device } from '@/lib/types'
 
-const playlists = [
-  'Recently Added',
-  'Recently Played',
-  'Top Songs',
-  'Top Albums',
-  'Top Artists',
-  'Logic Discography',
-  'Bedtime Beats',
-  'Feeling Happy',
-  'I miss Y2K Pop',
-  'Runtober',
-  'Mellow Days',
-  'Eminem Essentials',
-]
-// interface SidebarProps {
-// //   playlists: Playlist[]
-// }
+defineProps<{
+  selectedDevice: Device | null,
+  devices: Device[],
+}>();
 
-// defineProps<SidebarProps>()
+const emit = defineEmits(['update:selectedDevice']);
+const selectDevice = (device: Device) => {
+    emit('update:selectedDevice', device);
+};
 </script>
 
 <template>
@@ -103,10 +94,11 @@ const playlists = [
             <ScrollArea class="h-[300px] px-1">
             <div class="space-y-1 p-2">
                 <Button
-                v-for="(playlist, i) in playlists"
-                :key="`${playlist}-${i}`"
-                variant="ghost"
+                v-for="(device, i) in devices"
+                :key="`${device}-${i}`"
+                :variant="selectedDevice?.device_id === device.device_id ? 'secondary' : 'ghost'"
                 class="w-full justify-start font-normal"
+                @click="selectDevice(device)"
                 >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +116,7 @@ const playlists = [
                     <path d="M16 6H3" />
                     <path d="M12 18H3" />
                 </svg>
-                {{ playlist }}
+                {{ device.display_name }}
                 </Button>
             </div>
             </ScrollArea>

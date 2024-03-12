@@ -7,6 +7,8 @@ type Device struct {
 	LatestDevicePoint struct {
 		Latitude  float64 `json:"lat"`
 		Longitude float64 `json:"lng"`
+		Altitude  float64 `json:"altitude"`
+		Angle     float64 `json:"angle"`
 	} `json:"latest_device_point"`
 }
 
@@ -15,6 +17,8 @@ type DeviceLocation struct {
 	DisplayName string  `json:"display_name"`
 	Latitude    float64 `json:"latitude"`
 	Longitude   float64 `json:"longitude"`
+	Altitude    float64 `json:"altitude"`
+	Angle       float64 `json:"angle"`
 }
 
 type APIResponse struct {
