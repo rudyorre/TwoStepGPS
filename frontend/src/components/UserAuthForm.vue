@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, Ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import Cookies from 'js-cookie'
 // import LucideSpinner from '~icons/lucide/loader-2'
@@ -11,8 +11,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 const router = useRouter();
-const username = ref('');
-const password = ref('');
+const username = inject('username') as Ref<string | null>;
+const formUsername = ref('');
+const formPassword = ref('');
 const errorMessage = ref('');
 
 const isLoading = ref(false)
@@ -25,11 +26,12 @@ async function onSubmit(event: Event) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      username: username.value,
-      password: password.value
+      username: formUsername.value,
+      password: formPassword.value
     }),
   });
   if (response.ok) {
+    username.value = formUsername.value;
     const token = await response.text();
     Cookies.set('token', token, { expires: 14 });
     if (window.history.length > 1) {
@@ -38,8 +40,8 @@ async function onSubmit(event: Event) {
       router.push('/');
     }
   } else {
-    username.value = '';
-    password.value = '';
+    formUsername.value = '';
+    formPassword.value = '';
     errorMessage.value = 'Invalid username or password';
     isLoading.value = false;
   }
@@ -56,7 +58,7 @@ async function onSubmit(event: Event) {
           </Label>
           <Input
             id="username"
-            v-model="username"
+            v-model="formUsername"
             placeholder="username"
             type="username"
             auto-capitalize="none"
@@ -71,7 +73,7 @@ async function onSubmit(event: Event) {
           </Label>
           <Input
             id="password"
-            v-model="password"
+            v-model="formPassword"
             placeholder="password"
             type="password"
             auto-capitalize="none"

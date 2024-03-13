@@ -56,7 +56,7 @@ const components: { title: string; href: string; description: string }[] = [
       'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
   },
 ]
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, inject, Ref } from 'vue'
 import Cookies from 'js-cookie'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
@@ -64,7 +64,7 @@ const variant = ref('default');
 const navbarClasses = computed(() => {
     return variant.value === 'default' ? 'backdrop-blur-xl' : '';
 });
-const username = ref(null);
+const username = inject('username') as Ref<string | null>;
 const isLoading = ref(true);
 
 onMounted(async () => {
@@ -108,7 +108,7 @@ const logout = () => {
         </svg>
     </button>
     <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-        <NavigationMenu>
+        <NavigationMenu class="pl-32">
             <NavigationMenuList>
                 <NavigationMenuItem>
                 <NavigationMenuTrigger class="bg-foreground/0">Overview</NavigationMenuTrigger>
@@ -181,21 +181,20 @@ const logout = () => {
                         Dashboard
                     </router-link>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
+                <NavigationMenuItem :key="username ? username : ''" v-if="username === null && !isLoading">
                     <router-link
                         to="/login"
                         :class="navigationMenuTriggerStyle()"
-                        v-if="username === null && !isLoading"
                     >
                         Login
                     </router-link>
                 </NavigationMenuItem>
-                <DropdownMenu>
+                <DropdownMenu :key="(username ? username : '') + '1'" v-if="username && !isLoading">
                     <DropdownMenuTrigger as-child>
                         <NavigationMenuItem>
                             <Avatar
                                 class="flex items-center cursor-pointer"
-                                v-if="username && !isLoading"
+                                
                             >
                                 <AvatarImage :src="`https://avatars.jakerunzer.com/${username}.png`" alt="@radix-vue" />
                                 <AvatarFallback>{{username ? username[0] : ''}}</AvatarFallback>
@@ -211,6 +210,13 @@ const logout = () => {
                             </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
+                <NavigationMenuItem v-if="isLoading">
+                    <Avatar
+                        class="flex items-center cursor-pointer"
+                    >
+                        <AvatarImage src="" alt="@radix-vue" />
+                    </Avatar>
+                </NavigationMenuItem>
             </NavigationMenuList>
         </NavigationMenu>
     </div>

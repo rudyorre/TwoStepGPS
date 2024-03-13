@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import { ref, provide } from 'vue'
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
+
+const username = ref<string | null>(null);
+provide('username', username);
 </script>
 
 <template>
