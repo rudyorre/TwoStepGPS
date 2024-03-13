@@ -3,6 +3,13 @@
 ## Summary
 Create an application consisting of a Go server and a Vue user interface which includes data retrieval, storage, and presentation.
 
+# Design
+## Frontend
+- Made dashboard showing the device map publicly available for the purposes of making this as accessible as possible for the interview process, however, in a production environment, I would protect this route behind a login.
+## Backend
+### One Step GPS API
+- Didn't use [One Step GPS Webhooks](https://track.onestepgps.com/v3/apidoc-webhooks/) because there didn't seem to be enough information to implement it.
+
 ## Preliminary Stuff
 - [ ] Research the OneStepGPS API and determine what data is available and how to access it.
 - [ ] Implement authentication (basic)

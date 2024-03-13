@@ -10,6 +10,7 @@ import ContactView from '@/views/ContactView.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import StatisticsView from '@/views/StatisticsView.vue'
 import GoogleMapLoader from '@/components/GoogleMapLoader.vue'
+import AuthView from '@/views/AuthView.vue'
 
 const app = createApp(App);
 
@@ -19,6 +20,7 @@ const router = createRouter({
         { path: '/', component: HomeView },
         { path: '/about', component: AboutView },
         { path: '/contact', component: ContactView },
+        { path: '/login', component: AuthView },
         { 
             path: '/dashboard',
             component: DashboardView,

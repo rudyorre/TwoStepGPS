@@ -8,6 +8,16 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { LogOut } from 'lucide-vue-next'
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -46,11 +56,38 @@ const components: { title: string; href: string; description: string }[] = [
       'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
   },
 ]
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import Cookies from 'js-cookie'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+
 const variant = ref('default');
 const navbarClasses = computed(() => {
     return variant.value === 'default' ? 'backdrop-blur-xl' : '';
 });
+const username = ref(null);
+const isLoading = ref(true);
+
+onMounted(async () => {
+    const token = Cookies.get('token');
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const data = await response.json();
+
+    if (response.ok) {
+        username.value = data.username;
+    }
+    isLoading.value = false;
+});
+
+const logout = () => {
+    username.value = null;
+    Cookies.remove('token');
+};
+
 </script>
 
 <template>
@@ -144,6 +181,36 @@ const navbarClasses = computed(() => {
                         Dashboard
                     </router-link>
                 </NavigationMenuItem>
+                <NavigationMenuItem>
+                    <router-link
+                        to="/login"
+                        :class="navigationMenuTriggerStyle()"
+                        v-if="username === null && !isLoading"
+                    >
+                        Login
+                    </router-link>
+                </NavigationMenuItem>
+                <DropdownMenu>
+                    <DropdownMenuTrigger as-child>
+                        <NavigationMenuItem>
+                            <Avatar
+                                class="flex items-center cursor-pointer"
+                                v-if="username && !isLoading"
+                            >
+                                <AvatarImage :src="`https://avatars.jakerunzer.com/${username}.png`" alt="@radix-vue" />
+                                <AvatarFallback>{{username ? username[0] : ''}}</AvatarFallback>
+                            </Avatar>
+                        </NavigationMenuItem>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent class="w-56">
+                            <DropdownMenuLabel>My Account: {{username}}</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem class="cursor-pointer" @click="logout">
+                                <LogOut class="mr-2 h-4 w-4" />
+                                <span>Log out</span>
+                            </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </NavigationMenuList>
         </NavigationMenu>
     </div>
