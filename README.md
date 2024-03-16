@@ -9,6 +9,15 @@ Create an application consisting of a Go server and a Vue user interface which i
 ## Backend
 ### One Step GPS API
 - Didn't use [One Step GPS Webhooks](https://track.onestepgps.com/v3/apidoc-webhooks/) because there didn't seem to be enough information to implement it.
+## Infrastructure
+- 
+## Installation
+
+## Helpful Resources
+- [Creating a Vue.js 3 App with Vite.js and Vue Router](https://ochner.com.br/posts/creating-a-vuejs3-app-with-vitejs-and-vue-router)
+- [Flowbite - Tailwind CSS component library](https://flowbite.com/docs/getting-started/introduction/)
+- [Google Maps Javascript API Docs](https://developers.google.com/maps/documentation/javascript)
+- [Postman](https://www.postman.com/) for testing the backend APIs
 
 ## Preliminary Stuff
 - [ ] Research the OneStepGPS API and determine what data is available and how to access it.
@@ -26,7 +35,3 @@ Create an application consisting of a Go server and a Vue user interface which i
 - [ ] Allow the user to edit preferences and save those preferences to the server. These preferences can be anything you want, some recommendations are: sort order, hiding specific devices from view, user-uploaded icons for each device.
 - [ ] Show the current location of the devices on a map (Google Maps is a good choice) and update the map in real time as the API returns new data.
 
-## Useful Links
-- [Creating a Vue.js 3 App with Vite.js and Vue Router](https://ochner.com.br/posts/creating-a-vuejs3-app-with-vitejs-and-vue-router)
-- [Flowbite - Tailwind CSS component library](https://flowbite.com/docs/getting-started/introduction/)
-- [Google Maps Javascript API Docs](https://developers.google.com/maps/documentation/javascript)

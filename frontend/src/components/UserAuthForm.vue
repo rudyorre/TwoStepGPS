@@ -2,9 +2,6 @@
 import { ref, Ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import Cookies from 'js-cookie'
-// import LucideSpinner from '~icons/lucide/loader-2'
-// import GitHubLogo from '~icons/radix-icons/github-logo'
-
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -17,10 +14,12 @@ const formPassword = ref('');
 const errorMessage = ref('');
 
 const isLoading = ref(false)
+
 async function onSubmit(event: Event) {
   event.preventDefault()
   isLoading.value = true;
-  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
+  const endpoint = router.currentRoute.value.path === '/login' ? 'login' : 'signup';
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/${endpoint}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -32,7 +31,8 @@ async function onSubmit(event: Event) {
   });
   if (response.ok) {
     username.value = formUsername.value;
-    const token = await response.text();
+    const json = await response.json();
+    const token = json.token;
     Cookies.set('token', token, { expires: 14 });
     if (window.history.length > 1) {
       router.go(-1);
@@ -85,7 +85,7 @@ async function onSubmit(event: Event) {
         <p v-if="errorMessage" class="text-red-500">{{ errorMessage }}</p>
         <Button :disabled="isLoading">
           <LucideSpinner v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
-          Sign In
+          {{$route.path === '/login' ? "Sign In" : "Sign Up"}}
         </Button>
       </div>
     </form>
@@ -95,14 +95,19 @@ async function onSubmit(event: Event) {
       </div>
       <div class="relative flex justify-center text-xs uppercase">
         <span class="bg-background px-2 text-muted-foreground">
-          Or continue with
+          {{$route.path === '/login' ? "Don't have an account?" : "Already have an account?"}}
         </span>
       </div>
     </div>
-    <Button variant="outline" type="button" :disabled="isLoading">
-      <LucideSpinner v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
-      <GitHubLogo v-else class="mr-2 h-4 w-4" />
-      GitHub
-    </Button>
+    <router-link
+      :to="$route.path === '/signup' ? '/login' : '/signup'"
+      v-slot="{ navigate }"
+      class="inline-block"
+    >
+    <Button variant="outline" type="button" :disabled="isLoading" @click="navigate" class="w-full">
+        <LucideSpinner v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
+        {{$route.path === '/login' ? "Sign Up" : "Sign In"}}
+      </Button>
+    </router-link>
   </div>
 </template>

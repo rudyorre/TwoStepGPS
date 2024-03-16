@@ -12,6 +12,8 @@ import StatisticsView from '@/views/StatisticsView.vue'
 import GoogleMapLoader from '@/components/GoogleMapLoader.vue'
 import AuthView from '@/views/AuthView.vue'
 
+import { isUserLoggedIn } from '@/lib/utils'
+
 const app = createApp(App);
 
 const router = createRouter({
@@ -20,7 +22,28 @@ const router = createRouter({
         { path: '/', component: HomeView },
         { path: '/about', component: AboutView },
         { path: '/contact', component: ContactView },
-        { path: '/login', component: AuthView },
+        {
+            path: '/login',
+            component: AuthView,
+            beforeEnter: (_, __, next) => {
+                if (isUserLoggedIn()) {
+                    next('/');
+                } else {
+                    next();
+                }
+            },
+        },
+        {
+            path: '/signup',
+            component: AuthView,
+            beforeEnter: (_, __, next) => {
+                if (isUserLoggedIn()) {
+                    next('/');
+                } else {
+                    next();
+                }
+            },
+        },
         { 
             path: '/dashboard',
             component: DashboardView,

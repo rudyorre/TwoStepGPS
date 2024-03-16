@@ -26,14 +26,14 @@ import UserAuthForm from '@/components/UserAuthForm.vue'
       <div class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div class="flex flex-col space-y-2 text-center">
           <h1 class="text-2xl font-semibold tracking-tight">
-            Create an account
+            {{ $route.path === '/signup' ? 'Create an account' : 'Log in to your account' }}
           </h1>
           <p class="text-sm text-muted-foreground">
-            Enter your email below to create your account
+            Enter your email below to {{ $route.path === '/signup' ? 'create an account' : 'log in to your account' }}
           </p>
         </div>
         <UserAuthForm />
-        <p class="px-8 text-center text-sm text-muted-foreground">
+        <p class="px-8 text-center text-sm text-muted-foreground" v-if="$route.path === '/signup'" >
           By clicking continue, you agree to our
           <a
             href="/terms"

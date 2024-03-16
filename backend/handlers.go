@@ -1,14 +1,19 @@
 package main
 
 import (
+	"backend/models"
 	"encoding/json"
 	"net/http"
 )
 
+type DeviceService struct {
+	APIKey string
+}
+
 // getDisplayNames retrieves the display names of devices from a remote API and returns them as a
 // JSON response.
 func (d *DeviceService) getDisplayNames(w http.ResponseWriter, r *http.Request) {
-	var apiResponse APIResponse
+	var apiResponse models.APIResponse
 	err := fetchAndUnmarshal(
 		"https://track.onestepgps.com/v3/api/public/device?latest_point=true&api-key="+
 			d.APIKey, &apiResponse)
@@ -30,7 +35,7 @@ func (d *DeviceService) getDisplayNames(w http.ResponseWriter, r *http.Request) 
 // getDeviceLocations retrieves the latest device locations from the OneStepGPS API
 // and writes the locations as JSON to the HTTP response.
 func (d *DeviceService) getDeviceLocations(w http.ResponseWriter, r *http.Request) {
-	var apiResponse APIResponse
+	var apiResponse models.APIResponse
 	err := fetchAndUnmarshal(
 		"https://track.onestepgps.com/v3/api/public/device?latest_point=true&api-key="+
 			d.APIKey, &apiResponse)
@@ -39,9 +44,9 @@ func (d *DeviceService) getDeviceLocations(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	var locations []DeviceLocation
+	var locations []models.Device
 	for _, device := range apiResponse.ResultList {
-		locations = append(locations, DeviceLocation{
+		locations = append(locations, models.Device{
 			DeviceID:    device.DeviceID,
 			DisplayName: device.DisplayName,
 			Latitude:    device.LatestDevicePoint.Latitude,
