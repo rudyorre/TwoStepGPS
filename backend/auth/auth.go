@@ -111,26 +111,91 @@ func (a *AuthService) HandleLogin(w http.ResponseWriter, r *http.Request) {
 	a.createTokenAndRespond(responseUser.Username, w)
 }
 
-func (a *AuthService) HandleGetProfile(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	tokenString := r.Header.Get("Authorization")
-	if tokenString == "" {
-		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(map[string]string{"error": "Missing authorization header"})
-		return
-	}
-	tokenString = tokenString[len("Bearer "):]
-
-	username, err := a.verifyToken(tokenString)
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		json.NewEncoder(w).Encode(map[string]string{"error": "Invalid token"})
-		return
-	}
-
+func (a *AuthService) HandleGetProfile(w http.ResponseWriter, r *http.Request, username string) {
 	json.NewEncoder(w).Encode(map[string]string{"username": username})
 }
 
+func (a *AuthService) HandleUpdateUsername(w http.ResponseWriter, r *http.Request, username string) {
+	// Parse and validate the request body
+	var update struct {
+		CurrentUsername string `json:"current_username"`
+		NewUsername     string `json:"new_username"`
+	}
+	err := json.NewDecoder(r.Body).Decode(&update)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	// Validate the current username
+	if update.CurrentUsername != username {
+		http.Error(w, "Current username does not match token", http.StatusBadRequest)
+		return
+	}
+
+	// Validate the new username
+	if update.NewUsername == "" {
+		http.Error(w, "Username must not be empty", http.StatusBadRequest)
+		return
+	}
+	if update.NewUsername == update.CurrentUsername {
+		http.Error(w, "New username must be different from current username", http.StatusBadRequest)
+		return
+	}
+
+	// Check if the new username is already taken
+	exists, err := a.DB.UserExists(update.NewUsername)
+	if err != nil {
+		http.Error(w, "Error checking if user exists: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if exists {
+		http.Error(w, "Username already taken", http.StatusBadRequest)
+		return
+	}
+
+	// Update the username in the database
+	err = a.DB.UpdateUsername(username, update.NewUsername)
+	if err != nil {
+		http.Error(w, "Error updating username: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Create a token for the user and respond
+	a.createTokenAndRespond(update.NewUsername, w)
+}
+
+// AuthMiddleware is a middleware function that handles authentication for incoming requests.
+// It checks for a valid authorization header in the request, verifies the token, and calls the
+// provided handler function with the authenticated username. If the authorization header is
+// missing or the token is invalid, it returns an error response. The handler function should have
+// the signature: func(http.ResponseWriter, *http.Request, string)
+func (a *AuthService) AuthMiddleware(
+	handler func(http.ResponseWriter, *http.Request, string),
+) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		tokenString := r.Header.Get("Authorization")
+		if tokenString == "" {
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(map[string]string{"error": "Missing authorization header"})
+			return
+		}
+		tokenString = tokenString[len("Bearer "):]
+
+		username, err := a.verifyToken(tokenString)
+		if err != nil {
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(map[string]string{"error": "Invalid token"})
+			return
+		}
+
+		handler(w, r, username)
+	}
+}
+
+// createTokenAndRespond creates a token for the given username and sends a response to the
+// provided http.ResponseWriter.
 func (a *AuthService) createTokenAndRespond(username string, w http.ResponseWriter) {
 	// Create a token for the user
 	tokenString, err := a.createToken(username)
