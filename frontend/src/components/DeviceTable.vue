@@ -10,7 +10,6 @@ import {
   FlexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useVueTable,
   Table as TableType,
@@ -53,8 +52,6 @@ const selectDevice = (device: Device) => {
     emit('update:selectedDevice', device);
 };
 
-// data = data.concat(data).concat(data).concat(data).concat(data).concat(data)
-
 const hideDevice = async (device: Device) => {
   const hide = !device.is_hidden;
   device.is_hidden = hide;
@@ -88,9 +85,7 @@ const columns: ColumnDef<Device>[] = [
     id: 'hide',
     header: "Hide",
     cell: ({ row }) => h(Checkbox, {
-      // 'checked': row.getIsSelected(),
       'checked': row.original.is_hidden,
-    //   'onUpdate:checked': value => row.toggleSelected(!!value),
         'onClick': (event: Event) => {
             event.stopPropagation();
             hideDevice(row.original);
@@ -100,11 +95,7 @@ const columns: ColumnDef<Device>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-//   {
-//     accessorKey: 'status',
-//     header: 'Status',
-//     cell: ({ row }) => h('div', { class: 'capitalize' }, row.getValue('status')),
-//   },
+
   {
     accessorKey: 'display_name',
     header: ({ column }) => {
@@ -119,21 +110,6 @@ const columns: ColumnDef<Device>[] = [
       row.original.nickname ? `${row.original.nickname} (${row.original.display_name})` : row.original.display_name 
     ),
   },
-//   {
-//     accessorKey: 'amount',
-//     header: () => h('div', { class: 'text-right' }, 'Amount'),
-//     cell: ({ row }) => {
-//       const amount = Number.parseFloat(row.getValue('amount'))
-
-//       // Format the amount as a dollar amount
-//       const formatted = new Intl.NumberFormat('en-US', {
-//         style: 'currency',
-//         currency: 'USD',
-//       }).format(amount)
-
-//       return h('div', { class: 'text-right font-medium' }, formatted)
-//     },
-//   },
   {
     id: 'actions',
     enableHiding: false,
@@ -156,7 +132,6 @@ const sorting = ref<SortingState>([])
 const columnFilters = ref<ColumnFiltersState>([])
 const columnVisibility = ref<VisibilityState>({})
 const rowSelection = ref({})
-const selectedDeviceRef = ref<Device | null>(null);
 
 let table = ref<TableType<Device> | null>(null);
 
@@ -166,7 +141,6 @@ watchEffect(() => {
           data: props.devices,
           columns,
           getCoreRowModel: getCoreRowModel(),
-        //   getPaginationRowModel: getPaginationRowModel(),
           getSortedRowModel: getSortedRowModel(),
           getFilteredRowModel: getFilteredRowModel(),
           onSortingChange: updaterOrValue => valueUpdater(updaterOrValue, sorting),
