@@ -26,15 +26,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	deviceService := &handlers.DeviceService{APIKey: os.Getenv("ONESTEPGPS_API_KEY")}
+	deviceService, err := handlers.NewDeviceService(os.Getenv("ONESTEPGPS_API_KEY"), db)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	router := http.NewServeMux()
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		response := models.Response{Message: "Hello, World!"}
 		json.NewEncoder(w).Encode(response)
 	})
-	router.HandleFunc("/display-names", deviceService.HandleGetDisplayNames)
-	router.HandleFunc("/device-locations", deviceService.HandleGetDeviceLocations)
 
 	router.HandleFunc("/login", authService.HandleLogin)
 	router.HandleFunc("/signup", authService.HandleSignUp)
@@ -42,6 +43,23 @@ func main() {
 	router.HandleFunc(
 		"/update-username",
 		authService.AuthMiddleware(authService.HandleUpdateUsername),
+	)
+
+	router.HandleFunc("/display-names", deviceService.HandleGetDisplayNames)
+	router.HandleFunc("/device-locations", deviceService.HandleGetDeviceLocations)
+	router.HandleFunc("/hide-device", authService.AuthMiddleware(deviceService.HandleHideDevice))
+	router.HandleFunc(
+		"/get-hidden-devices",
+		authService.AuthMiddleware(deviceService.HandleGetHiddenDevices),
+	)
+	router.HandleFunc("/change-color", authService.AuthMiddleware(deviceService.HandleChangeColor))
+	router.HandleFunc(
+		"/get-device-settings",
+		authService.AuthMiddleware(deviceService.HandleGetDeviceSettings),
+	)
+	router.HandleFunc(
+		"/change-nickname",
+		authService.AuthMiddleware(deviceService.HandleChangeNickname),
 	)
 
 	c := cors.New(cors.Options{

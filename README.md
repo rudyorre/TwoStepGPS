@@ -1,37 +1,37 @@
-# trackerGPS
+# TwoStepGPS
 
 ## Summary
-Create an application consisting of a Go server and a Vue user interface which includes data retrieval, storage, and presentation.
+A comprehensive GPS tracking dashboard that provides real-time visualiztion of GPS devices on a map.
 
-# Design
-## Frontend
-- Made dashboard showing the device map publicly available for the purposes of making this as accessible as possible for the interview process, however, in a production environment, I would protect this route behind a login.
-## Backend
-### One Step GPS API
-- Didn't use [One Step GPS Webhooks](https://track.onestepgps.com/v3/apidoc-webhooks/) because there didn't seem to be enough information to implement it.
-## Infrastructure
-- 
-## Installation
+## Features
+- Dashboard for viewing GPS devices on a map
+- Short polling to get the latest device locations
+- Hide/show devices on the map
+- Nickname devices
+- Change the device color on the map
+- Authentication (to save the above preferences)
+
+## Architecture
+
+### Frontend
+
+The frontend is a Vue3 + Vite application. It's a Single Page Application (SPA) that utilizes the Google Maps API for the dashboard view. It allows signed in users to customize several properties about the dashboard.
+
+### Backend
+
+The backend is built with Go and uses PostgresDB for data storage. It handles JWT authentication, integrates with the OneStepGPS API, and interfaces with the Postgres database.
+
+### Infrastructure
+
+The frontend is hosted as a Vue/Vite app on Vercel, while the backend Go server is on a serverless fly.io VM which mounts the Postgres volume on startup. This is analogous to AWS Lambda paired with RDS.
+
+## Design Decisions
+- Made dashboard showing the device map publicly available for the purposes of making this as accessible as possible for the interview process, however, in a real production environment, I would protect this route behind a login.
+- Didn't use [One Step GPS Webhooks](https://track.onestepgps.com/v3/apidoc-webhooks/) because there didn't seem to be enough information to implement it, however I would use this in a production environment to avoid short polling.
+- The responsiveness is not perfect, as the mobile view is not optimized.
 
 ## Helpful Resources
 - [Creating a Vue.js 3 App with Vite.js and Vue Router](https://ochner.com.br/posts/creating-a-vuejs3-app-with-vitejs-and-vue-router)
 - [Flowbite - Tailwind CSS component library](https://flowbite.com/docs/getting-started/introduction/)
 - [Google Maps Javascript API Docs](https://developers.google.com/maps/documentation/javascript)
 - [Postman](https://www.postman.com/) for testing the backend APIs
-
-## Preliminary Stuff
-- [ ] Research the OneStepGPS API and determine what data is available and how to access it.
-- [ ] Implement authentication (basic)
-- [ ] Make two Google Maps API keys (one for development and one for production)
-- [ ] 404 Missing pages should have links to all of the actual pages (home, dashboard, about, etc)
-
-## The Go backend should do the following:
-- [ ] Request information from https://track.onestepgps.com/v3/api/public/device?latest_point=true&api-key=[APIKEY]
-- [ ] Provide some storage mechanism for user preferences or any other relevant data (exact storage mechanism is up to you)
-- [ ] Provide endpoints for anything else you need in the UI
-
-## The Vue UI should do the following:
-- [ ] List information regarding the devices returned from the API. Useful information would be the name, the current position, and its active state or drive status.
-- [ ] Allow the user to edit preferences and save those preferences to the server. These preferences can be anything you want, some recommendations are: sort order, hiding specific devices from view, user-uploaded icons for each device.
-- [ ] Show the current location of the devices on a map (Google Maps is a good choice) and update the map in real time as the API returns new data.
-
