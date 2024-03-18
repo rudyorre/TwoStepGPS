@@ -166,7 +166,12 @@ func (d *DeviceService) HandleGetDeviceSettings(w http.ResponseWriter, r *http.R
 	for _, device := range apiResponse.ResultList {
 		deviceSettings, ok := deviceSettingsMap[device.DeviceID]
 		if !ok {
-			continue
+			// Initialize default settings for the device
+			deviceSettings = models.DeviceSettings{
+				IsHidden: false,
+				Color:    "#AA4A44",
+				Nickname: "",
+			}
 		}
 		locations = append(locations, models.Device{
 			DeviceID:    device.DeviceID,
