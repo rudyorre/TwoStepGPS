@@ -5,4 +5,7 @@ export interface Device {
     longitude: number,
     altitude: number,
     angle: number,
+    is_hidden: boolean,
+    nickname: string,
+    color: string,
 };

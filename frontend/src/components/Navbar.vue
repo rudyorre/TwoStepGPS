@@ -19,43 +19,6 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { LogOut } from 'lucide-vue-next'
 
-const components: { title: string; href: string; description: string }[] = [
-  {
-    title: 'Alert Dialog',
-    href: '/docs/primitives/alert-dialog',
-    description:
-      'A modal dialog that interrupts the user with important content and expects a response.',
-  },
-  {
-    title: 'Hover Card',
-    href: '/docs/primitives/hover-card',
-    description:
-      'For sighted users to preview content available behind a link.',
-  },
-  {
-    title: 'Progress',
-    href: '/docs/primitives/progress',
-    description:
-      'Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.',
-  },
-  {
-    title: 'Scroll-area',
-    href: '/docs/primitives/scroll-area',
-    description: 'Visually or semantically separates content.',
-  },
-  {
-    title: 'Tabs',
-    href: '/docs/primitives/tabs',
-    description:
-      'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
-  },
-  {
-    title: 'Tooltip',
-    href: '/docs/primitives/tooltip',
-    description:
-      'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
-  },
-]
 import { ref, computed, onMounted, inject, Ref } from 'vue'
 import Cookies from 'js-cookie'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -121,58 +84,38 @@ const logout = () => {
                             href="/"
                         >
                             <img src="https://www.radix-vue.com/logo.svg" class="h-6 w-6">
-                            <div class="mb-2 mt-4 text-lg font-medium">
-                            shadcn/ui
-                            </div>
+                            <a class="mb-2 mt-4 text-lg font-medium" href="https://rudyorre.com" target="_blank">
+                            rudyorre.com
+                            </a>
                             <p class="text-sm leading-tight text-muted-foreground">
-                            Beautifully designed components built with Radix UI and
-                            Tailwind CSS.
+                            Check out my other work on my personal website.
                             </p>
                         </a>
                         </NavigationMenuLink>
                     </li>
-                    <NavigationMenuLink>
-                        <a
-                        class="flex select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                        href="/"
+                    <li class="row-span-3">
+                        <NavigationMenuLink>
+                            <a
+                            class="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                            href="/"
                         >
-                        <!-- <img src="https://www.radix-vue.com/logo.svg" class="h-6 w-6"> -->
-                        <!-- <div class="mb-2 mt-4 text-lg font-medium">
-                            shadcn/ui
-                        </div> -->
-                        <p class="text-sm leading-tight text-muted-foreground">
-                            Beautifully designed components built with Radix UI and
-                            Tailwind CSS.
-                        </p>
+                            <router-link class="mb-2 mt-4 text-lg font-medium" to="/">
+                            Why are we called TwoStepGPS?
+                            </router-link>
+                            <p class="text-sm leading-tight text-muted-foreground">
+                                The first step is checking out our website. The second step is realizing this is a demo and going to <a href="https://www.onestepgps.com/" target="_blank">OneStepGPS</a>.
+                            </p>
                         </a>
-                    </NavigationMenuLink>
-                    <NavigationMenuLink class="flex select-none flex-col justify-end rounded-md no-underline outline-none focus:shadow-md cursor-pointer">
-                        Fleet Tracking
-                    </NavigationMenuLink>
-                    <ListItem href="/docs" title="Introduction">
-                        
-                    </ListItem>
-                    <!-- <ListItem href="/docs/installation" title="Installation">
-                        How to install dependencies and structure your app.
-                    </ListItem>
-                    <ListItem href="/docs/primitives/typography" title="Typography">
-                        Styles for headings, paragraphs, lists...etc
-                    </ListItem> -->
+                        </NavigationMenuLink>
+                    </li>
                     </ul>
                 </NavigationMenuContent>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
                 <NavigationMenuTrigger class="bg-foreground/0">Products</NavigationMenuTrigger>
                 <NavigationMenuContent>
-                    <ul class="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[500px] ">
-                    <ListItem
-                        v-for="component in components"
-                        :key="component.title"
-                        :title="component.title"
-                        :href="component.href"
-                    >
-                        {{ component.description }}
-                    </ListItem>
+                    <ul class="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-1 lg:w-[500px] ">
+                        Just filler content since I don't have any products to display. Check out the dashboard instead, you don't even have to sign in!
                     </ul>
                 </NavigationMenuContent>
                 </NavigationMenuItem>

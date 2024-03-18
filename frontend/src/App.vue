@@ -2,6 +2,7 @@
 import { ref, provide } from 'vue'
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
+import { Toaster } from '@/components/ui/sonner'
 
 const username = ref<string | null>(null);
 provide('username', username);
@@ -15,6 +16,7 @@ provide('username', username);
     </main>
     <Footer v-if="!($route.path.includes('/dashboard'))" />
   </body>
+  <Toaster />
 </template>
 
 <style scoped>

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.6",
+    "@tanstack/vue-table": "^8.13.2",
     "@vueuse/core": "^10.9.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
@@ -21,7 +22,8 @@
     "tailwindcss-animate": "^1.0.7",
     "url": "^0.11.3",
     "vue": "^3.4.19",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vue-sonner": "^1.1.2"
   },
   "devDependencies": {
     "@types/google.maps": "^3.55.4",
