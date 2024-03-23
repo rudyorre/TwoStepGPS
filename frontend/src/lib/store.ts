@@ -32,10 +32,10 @@ export const useDeviceStore = defineStore({
                 device.nickname = nickname;
             }
         },
-        setColor(deviceId: string, color: string) {
-            const device = this.devices.find(device => device.device_id === deviceId);
-            if (device) {
-                device.color = color;
+        setColor(device: Device, color: string) {
+            const targetDevice = this.devices.find(d => d.device_id === device.device_id);
+            if (targetDevice) {
+                targetDevice.color = color;
             }
         },
         setHidden(device: Device, hidden: boolean) {

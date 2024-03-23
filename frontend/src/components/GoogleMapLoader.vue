@@ -15,9 +15,10 @@ const deviceStore = useDeviceStore();
 let map: google.maps.Map | null = null;
 let markers: { [device_id: string]: google.maps.marker.AdvancedMarkerElement } = {};
 
-const emit = defineEmits(['update:selectedDevice']);
 const selectDevice = (device: Device | null) => {
-    emit('update:selectedDevice', device);
+  if (device) {
+    deviceStore.setSelectedDevice(device);
+  }
 };
 watch(() => deviceStore.selectedDevice, (newDevice, _) => {
   if (newDevice && newDevice.latitude && newDevice.longitude) {
@@ -39,25 +40,31 @@ const updateDevices = async () => {
           if (device.is_hidden) {
             markers[device.device_id].map = null;
           } else {
-            markers[device.device_id].map = map;
             // Remove the existing marker
-            // markers[device.device_id].map = null;
+            markers[device.device_id].map = null;
 
-            // // Create a new marker with the updated color
-            // const markerElement = document.createElement('div');
-            // markerElement.style.width = '30px';
-            // markerElement.style.height = '30px';
-            // markerElement.style.cursor = 'pointer';
-            // markerElement.innerHTML = `
-            //   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="${device.color}" style="transform: rotate(${device.angle}deg);">
-            //     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            //     </svg>
-            // `;
-            // markers[device.device_id] = new google.maps.marker.AdvancedMarkerElement({
-            //   position: { lat: device.latitude, lng: device.longitude },
-            //   map: map,
-            //   content: markerElement,
-            // });
+            // Create a new marker with the updated color
+            const markerElement = document.createElement('div');
+            markerElement.style.width = '30px';
+            markerElement.style.height = '30px';
+            markerElement.style.cursor = 'pointer';
+            markerElement.innerHTML = `
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="${device.color}" style="transform: rotate(${device.angle}deg);">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+            `;
+            const marker = new google.maps.marker.AdvancedMarkerElement({
+              position: { lat: device.latitude, lng: device.longitude },
+              map: map,
+              content: markerElement,
+            });
+
+            marker.addListener("click", () => {
+              map?.panTo({ lat: device.latitude, lng: device.longitude });
+              selectDevice(device);
+            });
+
+            markers[device.device_id] = marker;
           }
         }
       }

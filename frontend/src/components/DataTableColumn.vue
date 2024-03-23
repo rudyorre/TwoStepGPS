@@ -44,6 +44,8 @@ const router = useRouter();
 
 
 const saveChanges = async () => {
+  deviceStore.setColor(props.device, selectedColor.value);
+
   if (isUserLoggedIn()) {
     const token = Cookies.get('token');
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/change-color`, {
@@ -61,8 +63,6 @@ const saveChanges = async () => {
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-  
-    location.reload();
   
     toast('Updated color', {
       description: "",
