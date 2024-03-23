@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { h, ref, defineEmits, watchEffect } from 'vue'
+import { h, ref, watchEffect } from 'vue'
 import type {
   ColumnDef,
   ColumnFiltersState,
@@ -40,21 +40,19 @@ import { isUserLoggedIn } from '@/lib/utils'
 import Cookies from 'js-cookie'
 import { toast } from 'vue-sonner'
 import { useRouter } from 'vue-router'
+import { useDeviceStore } from '@/lib/store'
 
 const router = useRouter();
-const props = defineProps<{
-  selectedDevice: Device | null,
-  devices: Device[],
-}>();
+const deviceStore = useDeviceStore();
 
-const emit = defineEmits(['update:selectedDevice', 'update:devices']);
 const selectDevice = (device: Device) => {
-    emit('update:selectedDevice', device);
-};
+  deviceStore.setSelectedDevice(device);
+}
 
 const hideDevice = async (device: Device) => {
   const hide = !device.is_hidden;
   device.is_hidden = hide;
+  deviceStore.setHidden(device, hide);
 
   if (isUserLoggedIn()) {
     const token = Cookies.get('token');
@@ -126,19 +124,19 @@ const columns: ColumnDef<Device>[] = [
       }))
     },
   },
-]
+];
 
-const sorting = ref<SortingState>([])
-const columnFilters = ref<ColumnFiltersState>([])
-const columnVisibility = ref<VisibilityState>({})
-const rowSelection = ref({})
+const sorting = ref<SortingState>([]);
+const columnFilters = ref<ColumnFiltersState>([]);
+const columnVisibility = ref<VisibilityState>({});
+const rowSelection = ref({});
 
 let table = ref<TableType<Device> | null>(null);
 
 watchEffect(() => {
-    if (props.devices) {
+    if (deviceStore.devices) {
         table.value = useVueTable({
-          data: props.devices,
+          data: deviceStore.devices,
           columns,
           getCoreRowModel: getCoreRowModel(),
           getSortedRowModel: getSortedRowModel(),
@@ -155,7 +153,7 @@ watchEffect(() => {
           },
         });
     }
-})
+});
 </script>
 
 <template>
@@ -201,7 +199,7 @@ watchEffect(() => {
           <template v-if="table.getRowModel().rows?.length">
             <TableRow
                 class="cursor-pointer"
-                :class="{ 'bg-primary-foreground': row.original.device_id === selectedDevice?.device_id }"
+                :class="{ 'bg-primary-foreground': row.original.device_id === deviceStore.selectedDevice?.device_id }"
                 v-for="row in table.getRowModel().rows"
                 :key="row.id"
                 :data-state="row.getIsSelected() && 'selected'"

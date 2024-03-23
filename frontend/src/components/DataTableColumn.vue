@@ -103,7 +103,7 @@ const submitNickname = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
   
-    toast(`Updated nickname to ${nickname.value}`, {
+    toast(nickname.value === "" ? 'Removed nickname' : `Updated nickname to ${nickname.value}`, {
       description: "",
     });
 

@@ -3,26 +3,23 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, defineProps, watch } from 'vue'
+import { onMounted, watch } from 'vue'
 import { Loader } from '@googlemaps/js-api-loader'
 import { Device } from '@/lib/types'
 import { isUserLoggedIn } from '@/lib/utils';
-// import { renderToString } from '@vue/server-renderer'
-// import DeviceMarker from '@/components/DeviceMarker.vue'
 import Cookies from 'js-cookie';
+import { useDeviceStore } from '@/lib/store';
+
+const deviceStore = useDeviceStore();
 
 let map: google.maps.Map | null = null;
 let markers: { [device_id: string]: google.maps.marker.AdvancedMarkerElement } = {};
-const props = defineProps<{
-  selectedDevice: Device | null,
-  devices: Device[],
-}>();
 
 const emit = defineEmits(['update:selectedDevice']);
 const selectDevice = (device: Device | null) => {
     emit('update:selectedDevice', device);
 };
-watch(() => props.selectedDevice, (newDevice, _) => {
+watch(() => deviceStore.selectedDevice, (newDevice, _) => {
   if (newDevice && newDevice.latitude && newDevice.longitude) {
     map?.panTo({ lat: newDevice.latitude, lng: newDevice.longitude });
   }
@@ -37,7 +34,7 @@ const loader = new Loader({
 const updateDevices = async () => {
   if (document.getElementById('map')) {
     loader.load().then(async () => {
-      for (const device of props.devices) {
+      for (const device of deviceStore.devices) {
         if (markers[device.device_id]) {
           if (device.is_hidden) {
             markers[device.device_id].map = null;
@@ -68,7 +65,7 @@ const updateDevices = async () => {
     }
   };
 
-watch(() => props.devices, async () => {
+watch(() => deviceStore.devices, async () => {
   await updateDevices();
 }, { immediate: true, deep: true });
   
