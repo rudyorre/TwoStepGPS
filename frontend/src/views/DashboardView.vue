@@ -4,6 +4,9 @@ import Sidebar from '@/components/Sidebar.vue'
 import { Device } from '@/lib/types'
 import { isUserLoggedIn } from '@/lib/utils'
 import Cookies from 'js-cookie'
+import { useDeviceStore } from '@/lib/store'
+
+const deviceStore = useDeviceStore();
 
 const selectedDevice = ref<Device | null>(null);
 const devices = ref<Device[]>([]);
@@ -20,7 +23,10 @@ const fetchDevices = async () => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        devices.value = await response.json();
+        const json = await response.json();
+        devices.value = json;
+        deviceStore.setDevices(json);
+
     } else {
         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/device-locations`);
         devices.value = await response.json();
@@ -53,7 +59,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <!-- <Navbar variant="dashboard" /> -->
     <div class="">
         <div class="bg-background">
             <div class="grid lg:grid-cols-5">

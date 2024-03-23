@@ -13,8 +13,11 @@ import GoogleMapLoader from '@/components/GoogleMapLoader.vue'
 import AuthView from '@/views/AuthView.vue'
 
 import { isUserLoggedIn } from '@/lib/utils'
+import { createPinia } from 'pinia'
 
 const app = createApp(App);
+const pinia = createPinia();
+app.use(pinia);
 
 const router = createRouter({
     history: createWebHistory(),
