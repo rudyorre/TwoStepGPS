@@ -1,20 +1,12 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, inject, Ref } from 'vue'
 import { cn, isUserLoggedIn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import Logo from '@/components/Logo.vue'
-import { Device } from '@/lib/types'
 import DeviceTable from '@/components/DeviceTable.vue'
+import { useUserStore } from '@/lib/store'
 
-defineProps<{
-  selectedDevice: Device | null,
-  devices: Device[],
-}>();
-
-const emit = defineEmits(['update:selectedDevice', 'update:devices']);
-
-const username = inject('username') as Ref<string | null>;
+const userStore = useUserStore();
 </script>
 
 <template>
@@ -72,19 +64,14 @@ const username = inject('username') as Ref<string | null>;
             Devices
         </h2>
         <div class="py-2 overflow-auto">
-            <DeviceTable
-                :devices="devices"
-                :selectedDevice="selectedDevice"
-                @update:selectedDevice="selectedDevice => emit('update:selectedDevice', selectedDevice)"
-                @update:devices="devices => emit('update:devices', devices)"
-            />
+            <DeviceTable />
         </div>
         <div class="absolute bottom-4 left-4 flex items-center gap-2">
             <Avatar class="flex items-center cursor-pointer" v-if="isUserLoggedIn()">
-                <AvatarImage :src="`https://avatars.jakerunzer.com/${username}.png`" alt="@radix-vue" />
-                <AvatarFallback>{{username ? username[0] : ''}}</AvatarFallback>
+                <AvatarImage :src="`https://avatars.jakerunzer.com/${userStore.username}.png`" alt="@radix-vue" />
+                <AvatarFallback>{{userStore.username ? userStore.username[0] : ''}}</AvatarFallback>
             </Avatar>
-            <div class="font-bold cursor-pointer">{{username}}</div>
+            <div class="font-bold cursor-pointer">{{userStore.username}}</div>
         </div>
     </div>
   </div>

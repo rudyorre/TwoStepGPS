@@ -18,6 +18,9 @@ import { ref, defineEmits } from 'vue';
 import Cookies from 'js-cookie'
 import { isUserLoggedIn } from '@/lib/utils'
 import { useRouter } from 'vue-router'
+import { useDeviceStore } from '@/lib/store'
+
+const deviceStore = useDeviceStore();
 
 const props = defineProps<{
   device: Device
@@ -41,6 +44,8 @@ const router = useRouter();
 
 
 const saveChanges = async () => {
+  deviceStore.setColor(props.device, selectedColor.value);
+
   if (isUserLoggedIn()) {
     const token = Cookies.get('token');
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/change-color`, {
@@ -59,8 +64,6 @@ const saveChanges = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
   
-    location.reload();
-  
     toast('Updated color', {
       description: "",
     });
@@ -78,6 +81,10 @@ const saveChanges = async () => {
 let nickname = ref(props.device.nickname);
 
 const submitNickname = async () => {
+  // Update the nickname locally
+  deviceStore.setNickname(props.device.device_id, nickname.value);
+
+  // Update the nickname on the backend
   if (isUserLoggedIn()) {
     const token = Cookies.get('token');
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/change-nickname`, {
@@ -96,14 +103,12 @@ const submitNickname = async () => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
   
-    // Clear the input field
-    nickname.value = '';
-  
-    location.reload();
-  
-    toast('Updated nickname', {
+    toast(nickname.value === "" ? 'Removed nickname' : `Updated nickname to ${nickname.value}`, {
       description: "",
     });
+
+    // Clear the input field
+    nickname.value = '';
   } else {
     toast('Your preference will not be saved.', {
       description: 'You must be logged in to save your preferences.',

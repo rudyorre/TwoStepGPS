@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 import Sidebar from '@/components/Sidebar.vue'
-import { Device } from '@/lib/types'
 import { isUserLoggedIn } from '@/lib/utils'
 import Cookies from 'js-cookie'
+import { useDeviceStore } from '@/lib/store'
 
-const selectedDevice = ref<Device | null>(null);
-const devices = ref<Device[]>([]);
+const deviceStore = useDeviceStore();
 
 let intervalId: number | null = null;
 const pollingRateSeconds = 30;
@@ -20,10 +19,13 @@ const fetchDevices = async () => {
                 Authorization: `Bearer ${token}`,
             },
         });
-        devices.value = await response.json();
+        const json = await response.json();
+        deviceStore.setDevices(json);
+
     } else {
         const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/device-locations`);
-        devices.value = await response.json();
+        const json = await response.json();
+        deviceStore.setDevices(json);
     }
 };
 
@@ -53,24 +55,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <!-- <Navbar variant="dashboard" /> -->
     <div class="">
         <div class="bg-background">
             <div class="grid lg:grid-cols-5">
-                <Sidebar
-                    :selectedDevice="selectedDevice"
-                    :devices="devices"
-                    @update:selectedDevice="selectedDevice = $event"
-                    @update:devices="devices = $event"
-                    class="sidebar lg:block h-[100vh]"
-                />
-                <router-view
-                    :selectedDevice="selectedDevice"
-                    :devices="devices"
-                    @update:selectedDevice="selectedDevice = $event"
-                    @update:devices="devices = $event"
-                    class="col-span-3 lg:col-span-4 lg:border-l"
-                />
+                <Sidebar class="sidebar lg:block h-[100vh]" />
+                <router-view class="col-span-3 lg:col-span-4 lg:border-l" />
             </div>
         </div>
     </div>
