@@ -1,7 +1,20 @@
-# TwoStepGPS
+<p align="center">
+    <a href='https://twostepgps.vercel.app' target='_blank' rel='nofollow'>
+        <img src='https://flowbite.com/docs/images/logo.svg' alt='TwoStepGPS Logo' width='125px'/>
+    </a>
+</p>
 
-## Summary
-A comprehensive GPS tracking dashboard that provides real-time visualiztion of GPS devices on a map.
+<h1 align="center">TwoStepGPS</h1>
+
+<p align="center">
+    <a  href='https://twostepgps.vercel.app' target='_blank' rel='nofollow'>
+        <img src="https://therealsujitk-vercel-badge.vercel.app/?app=twostepgps&name=Vercel" />
+    </a>
+</p>
+
+<p align="center">
+    A GPS tracking dashboard that provides real-time visualiztion of GPS devices on a map.
+</p>
 
 ## Features
 - Dashboard for viewing GPS devices on a map
