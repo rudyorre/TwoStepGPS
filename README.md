@@ -10,10 +10,13 @@
     <a  href='https://twostepgps.vercel.app' target='_blank' rel='nofollow'>
         <img src="https://therealsujitk-vercel-badge.vercel.app/?app=twostepgps&name=Vercel" />
     </a>
+    <a  href='https://twostepgps.vercel.app' target='_blank' rel='nofollow'>
+        <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Ftwostepgps-proud-frog-2479.fly.dev%2Fshields" />
+    </a>
 </p>
 
 <p align="center">
-    A GPS tracking dashboard that provides real-time visualiztion of GPS devices on a map.
+    A customizable dashboard that provides real-time visualization of GPS devices.
 </p>
 
 ## Features

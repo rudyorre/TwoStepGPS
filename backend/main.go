@@ -36,6 +36,15 @@ func main() {
 		response := models.Response{Message: "Hello, World!"}
 		json.NewEncoder(w).Encode(response)
 	})
+	router.HandleFunc("/shields", func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]interface{}{
+			"schemaVersion": 1,
+			"label":         "Fly.io",
+			"message":       "deployed",
+			"color":         "purple",
+		}
+		json.NewEncoder(w).Encode(response)
+	})
 
 	router.HandleFunc("/login", authService.HandleLogin)
 	router.HandleFunc("/signup", authService.HandleSignUp)
