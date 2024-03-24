@@ -1,15 +1,20 @@
 import { defineStore } from 'pinia';
 import { Device } from '@/lib/types'
+import { isUserLoggedIn } from '@/lib/utils';
+import Cookies from 'js-cookie';
 
 export const useUserStore = defineStore({
     id: 'user',
     state: () => ({
-        username: '',
+        username: null as string | null,
     }),
     actions: {
         setUsername(username: string) {
             this.username = username;
         },
+        resetState() {
+            this.username = null;
+        }
     },
 });
 
@@ -18,9 +23,43 @@ export const useDeviceStore = defineStore({
     state: () => ({
         devices: [] as Device[],
         selectedDevice: null as Device | null,
+        intervalId: null as number | null,
     }),
     actions: {
-        setSelectedDevice(device: Device) {
+        async fetchDevices() {
+            let response;
+            if (isUserLoggedIn()) {
+                const token = Cookies.get('token');
+                response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/get-device-settings`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+            } else {
+                response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/device-locations`);
+            }
+            const json = await response.json();
+            this.setDevices(json);
+        },
+        async startPolling(pollingRateSeconds: number) {
+            // Fetch the devices immediately
+            await this.fetchDevices();
+
+            // Start polling
+            this.intervalId = window.setInterval(() => this.fetchDevices(), pollingRateSeconds * 1000);
+
+            // Pause polling when the user is not at the website
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'hidden' && this.intervalId !== null) {
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
+                } else {
+                    this.intervalId = window.setInterval(() => this.fetchDevices(), pollingRateSeconds * 1000);
+                }
+            });
+        },
+        setSelectedDevice(device: Device | null) {
             this.selectedDevice = device;
         },
         setDevices(updatedDevices: Device[]) {
@@ -44,6 +83,10 @@ export const useDeviceStore = defineStore({
             if (targetDevice) {
                 targetDevice.is_hidden = hidden;
             }
+        },
+        resetState() {
+            this.devices = [];
+            this.selectedDevice = null;
         }
     }
 });
