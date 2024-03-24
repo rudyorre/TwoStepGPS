@@ -7,12 +7,8 @@
 <h1 align="center">TwoStepGPS</h1>
 
 <p align="center">
-    <a  href='https://twostepgps.vercel.app' target='_blank' rel='nofollow'>
-        <img src="https://therealsujitk-vercel-badge.vercel.app/?app=twostepgps&name=Vercel" />
-    </a>
-    <a  href='https://twostepgps.vercel.app' target='_blank' rel='nofollow'>
-        <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Ftwostepgps-proud-frog-2479.fly.dev%2Fshields" />
-    </a>
+    <img src="https://therealsujitk-vercel-badge.vercel.app/?app=twostepgps&name=Vercel" />
+    <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Ftwostepgps-proud-frog-2479.fly.dev%2Fshields" />
 </p>
 
 <p align="center">
