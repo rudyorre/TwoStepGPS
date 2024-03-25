@@ -1,11 +1,27 @@
 <script setup lang="ts">
-import { ref, provide } from 'vue'
+import { onMounted } from 'vue'
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import { Toaster } from '@/components/ui/sonner'
+import Cookies from 'js-cookie'
+import { useUserStore } from '@/lib/store'
 
-const username = ref<string | null>(null);
-provide('username', username);
+const userStore = useUserStore();
+
+onMounted(async () => {
+    const token = Cookies.get('token');
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const data = await response.json();
+
+    if (response.ok) {
+      userStore.setUsername(data.username);
+    }
+});
 </script>
 
 <template>

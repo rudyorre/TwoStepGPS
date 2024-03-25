@@ -4,12 +4,15 @@ import { Device } from '@/lib/types'
 export const useUserStore = defineStore({
     id: 'user',
     state: () => ({
-        username: '',
+        username: null as string | null,
     }),
     actions: {
         setUsername(username: string) {
             this.username = username;
         },
+        resetState() {
+            this.username = null;
+        }
     },
 });
 
