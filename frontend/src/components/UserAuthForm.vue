@@ -6,10 +6,8 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useDeviceStore } from '@/lib/store'
 
 const router = useRouter();
-const deviceStore = useDeviceStore();
 const username = inject('username') as Ref<string | null>;
 const formUsername = ref('');
 const formPassword = ref('');
@@ -36,7 +34,6 @@ async function onSubmit(event: Event) {
     const json = await response.json();
     const token = json.token;
     Cookies.set('token', token, { expires: 14 });
-    await deviceStore.fetchDevices();
     if (window.history.length > 1) {
       router.go(-1);
     } else {

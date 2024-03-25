@@ -19,23 +19,38 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { LogOut } from 'lucide-vue-next'
 
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, inject, Ref } from 'vue'
+import Cookies from 'js-cookie'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-import { fetchUser, logOut } from '@/lib/auth'
-import { useUserStore } from '@/lib/store'
-
-const userStore = useUserStore();
 const variant = ref('default');
 const navbarClasses = computed(() => {
     return variant.value === 'default' ? 'backdrop-blur-xl' : '';
 });
+const username = inject('username') as Ref<string | null>;
 const isLoading = ref(true);
 
 onMounted(async () => {
-    fetchUser();
+    const token = Cookies.get('token');
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const data = await response.json();
+
+    if (response.ok) {
+        username.value = data.username;
+    }
     isLoading.value = false;
 });
+
+const logout = () => {
+    username.value = null;
+    Cookies.remove('token');
+};
+
 </script>
 
 <template>
@@ -109,7 +124,7 @@ onMounted(async () => {
                         Dashboard
                     </router-link>
                 </NavigationMenuItem>
-                <NavigationMenuItem :key="userStore.username ? userStore.username : ''" v-if="userStore.username === null && !isLoading">
+                <NavigationMenuItem :key="username ? username : ''" v-if="username === null && !isLoading">
                     <router-link
                         to="/login"
                         :class="navigationMenuTriggerStyle()"
@@ -117,22 +132,22 @@ onMounted(async () => {
                         Login
                     </router-link>
                 </NavigationMenuItem>
-                <DropdownMenu :key="(userStore.username ? userStore.username : '') + '1'" v-if="userStore.username && !isLoading">
+                <DropdownMenu :key="(username ? username : '') + '1'" v-if="username && !isLoading">
                     <DropdownMenuTrigger as-child>
                         <NavigationMenuItem>
                             <Avatar
                                 class="flex items-center cursor-pointer"
                                 
                             >
-                                <AvatarImage :src="`https://avatars.jakerunzer.com/${userStore.username}.png`" alt="@radix-vue" />
-                                <AvatarFallback>{{userStore.username ? userStore.username[0] : ''}}</AvatarFallback>
+                                <AvatarImage :src="`https://avatars.jakerunzer.com/${username}.png`" alt="@radix-vue" />
+                                <AvatarFallback>{{username ? username[0] : ''}}</AvatarFallback>
                             </Avatar>
                         </NavigationMenuItem>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent class="w-56">
-                            <DropdownMenuLabel>My Account: {{userStore.username}}</DropdownMenuLabel>
+                            <DropdownMenuLabel>My Account: {{username}}</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem class="cursor-pointer" @click="logOut">
+                            <DropdownMenuItem class="cursor-pointer" @click="logout">
                                 <LogOut class="mr-2 h-4 w-4" />
                                 <span>Log out</span>
                             </DropdownMenuItem>
