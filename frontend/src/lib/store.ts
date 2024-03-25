@@ -47,6 +47,10 @@ export const useDeviceStore = defineStore({
             if (targetDevice) {
                 targetDevice.is_hidden = hidden;
             }
+        },
+        resetState() {
+            this.devices = [];
+            this.selectedDevice = null;
         }
     }
 });

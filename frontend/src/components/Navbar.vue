@@ -23,9 +23,10 @@ import { ref, computed } from 'vue'
 import Cookies from 'js-cookie'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-import { useUserStore } from '@/lib/store'
+import { useDeviceStore, useUserStore } from '@/lib/store'
 
 const userStore = useUserStore();
+const deviceStore = useDeviceStore();
 const variant = ref('default');
 const navbarClasses = computed(() => {
     return variant.value === 'default' ? 'backdrop-blur-xl' : '';
@@ -33,6 +34,7 @@ const navbarClasses = computed(() => {
 
 const logout = () => {
     userStore.resetState();
+    deviceStore.resetState();
     Cookies.remove('token');
 };
 

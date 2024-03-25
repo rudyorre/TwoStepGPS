@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Cookies from 'js-cookie'
-import { cn } from '@/lib/utils'
+import { cn, fetchDevices } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -37,6 +37,7 @@ async function onSubmit(event: Event) {
     const json = await response.json();
     const token = json.token;
     Cookies.set('token', token, { expires: 14 });
+    await fetchDevices();
     if (window.history.length > 1) {
       router.go(-1);
     } else {
