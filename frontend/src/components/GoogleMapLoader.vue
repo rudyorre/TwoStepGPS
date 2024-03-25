@@ -49,7 +49,7 @@ const updateDevices = async () => {
             markerElement.style.height = '30px';
             markerElement.style.cursor = 'pointer';
             markerElement.innerHTML = `
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="${device.color}" style="transform: rotate(${device.angle}deg);">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="${device.color ? device.color : "#AA4A44"}" style="transform: rotate(${device.angle}deg);">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                 </svg>
             `;
