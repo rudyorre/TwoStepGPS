@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { ref, Ref, inject } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Cookies from 'js-cookie'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useUserStore } from '@/lib/store'
 
 const router = useRouter();
-const username = inject('username') as Ref<string | null>;
+const userStore = useUserStore();
 const formUsername = ref('');
 const formPassword = ref('');
 const errorMessage = ref('');
@@ -16,6 +17,7 @@ const errorMessage = ref('');
 const isLoading = ref(false)
 
 async function onSubmit(event: Event) {
+  console.log('submit')
   event.preventDefault()
   isLoading.value = true;
   const endpoint = router.currentRoute.value.path === '/login' ? 'login' : 'signup';
@@ -30,7 +32,8 @@ async function onSubmit(event: Event) {
     }),
   });
   if (response.ok) {
-    username.value = formUsername.value;
+    userStore.setUsername(formUsername.value);
+    console.log('Logged in')
     const json = await response.json();
     const token = json.token;
     Cookies.set('token', token, { expires: 14 });
