@@ -60,8 +60,13 @@ At the moment, we don't have detailed instructions to get this started, however 
 - Didn't use [One Step GPS Webhooks](https://track.onestepgps.com/v3/apidoc-webhooks/) because there didn't seem to be enough information to implement it, however I would use this in a production environment to avoid short polling.
 - The responsiveness is not perfect, as the mobile view is not optimized.
 
+## Future Improvements
+- Server push model using SSE/long polling/websockets between the client and server to avoid short polling. Instead the server would be making the polling requests to get the device data.
+- OAuth2 in addition or instead of plain JWT authentication.
+- Responsive mobile view.
+
 ## Helpful Resources
 - [Creating a Vue.js 3 App with Vite.js and Vue Router](https://ochner.com.br/posts/creating-a-vuejs3-app-with-vitejs-and-vue-router)
-- [Flowbite - Tailwind CSS component library](https://flowbite.com/docs/getting-started/introduction/)
 - [Google Maps Javascript API Docs](https://developers.google.com/maps/documentation/javascript)
-- [Postman](https://www.postman.com/) for testing the backend APIs
+- [Shadcn-vue](https://www.shadcn-vue.com/)
+- [Fly.io Postgres Volume](https://fly.io/docs/postgres/)
