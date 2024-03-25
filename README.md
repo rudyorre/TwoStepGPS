@@ -29,13 +29,31 @@
 
 The frontend is a Vue3 + Vite application. It's a Single Page Application (SPA) that utilizes the Google Maps API for the dashboard view. It allows signed in users to customize several properties about the dashboard.
 
+This can be set up with:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+
 ### Backend
 
 The backend is built with Go and uses PostgresDB for data storage. It handles JWT authentication, integrates with the OneStepGPS API, and interfaces with the Postgres database.
 
+This can be set up with:
+
+```bash
+cd backend
+go run .
+```
+
 ### Infrastructure
 
 The frontend is hosted as a Vue/Vite app on Vercel, while the backend Go server is on a serverless fly.io VM which mounts the Postgres volume on startup. This is analogous to AWS Lambda paired with RDS.
+
+At the moment, we don't have detailed instructions to get this started, however if you're eager the `.env.local.example` files in the frontend and backend directories should give you a good starting point. The only non-trivial part is setting up the Fly.io Postgres volume and getting the connection details, the rest of the `env` variables are API keys.
 
 ## Design Decisions
 - Made dashboard showing the device map publicly available for the purposes of making this as accessible as possible for the interview process, however, in a real production environment, I would protect this route behind a login.
